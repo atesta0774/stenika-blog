@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stenika — Calisthenics a Grugliasco</title>
+<meta name="description" content="Stenika è il primo studio di calisthenics a Grugliasco. Allenamento a corpo libero, coach certificati, risultati concreti. Prenota la tua prima sessione gratuita.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #8B1A1A;
+    --red-light: #B83232;
+    --red-dim: #5C1010;
+    --red-glow: rgba(139,26,26,0.18);
+    --red-border: rgba(139,26,26,0.25);
+    --red-border-hover: rgba(184,50,50,0.5);
+    --black: #080808;
+    --surface: #0F0F0F;
+    --surface2: #161616;
+    --surface3: #1E1E1E;
+    --text: #F0EDE6;
+    --text-muted: #888880;
+    --text-dim: #4A4A46;
+    --border: rgba(139,26,26,0.18);
+  }
+
+  /* LIGHT MODE */
+  html.light {
+    --red: #8B1A1A;
+    --red-light: #9B1C1C;
+    --red-dim: #7A1515;
+    --red-glow: rgba(139,26,26,0.08);
+    --red-border: rgba(139,26,26,0.2);
+    --red-border-hover: rgba(139,26,26,0.45);
+    --black: #F7F3EE;
+    --surface: #F0EBE3;
+    --surface2: #E8E0D5;
+    --surface3: #DDD4C6;
+    --text: #1A0A0A;
+    --text-muted: #5A4040;
+    --text-dim: #9A8080;
+    --border: rgba(139,26,26,0.15);
+  }
+
+  /* Transizione globale al cambio tema */
+  *, *::before, *::after {
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--text);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--red-light);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 32px; height: 32px;
+    border: 1px solid rgba(139,26,26,0.6);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, opacity 0.3s;
+  }
+  @media (hover: none), (pointer: coarse) {
+    .cursor, .cursor-ring { display: none; }
+    body { cursor: auto; }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 48px;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.96), transparent);
+    transition: padding 0.3s, background 0.3s;
+  }
+  nav.scrolled {
+    padding: 16px 48px;
+    background: rgba(8,8,8,0.97);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 5px;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--red-light); }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--red-light); }
+  .nav-cta {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    border: 1px solid var(--red);
+    color: var(--red-light);
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: none;
+  }
+  .nav-cta:hover {
+    background: var(--red);
+    color: var(--text);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 48px 88px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 55% 60% at 68% 45%, var(--red-glow) 0%, transparent 65%),
+      radial-gradient(ellipse 30% 40% at 15% 75%, rgba(139,26,26,0.06) 0%, transparent 60%),
+      #080808;
+  }
+  .hero-lines {
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.012) 0px,
+      rgba(255,255,255,0.012) 1px,
+      transparent 1px,
+      transparent 80px
+    );
+  }
+
+  /* HERO IMAGE */
+  .hero-img-wrap {
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 55%;
+    overflow: hidden;
+  }
+  .hero-img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right, var(--black) 0%, rgba(8,8,8,0.35) 40%, transparent 65%),
+      linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 35%);
+    z-index: 1;
+  }
+  .hero-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    max-width: 680px;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red-light);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--red-light);
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 130px);
+    line-height: 0.88;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s ease forwards;
+  }
+  .hero-title em {
+    font-style: normal;
+    color: var(--red-light);
+    display: block;
+  }
+  .hero-subtitle {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(19px, 2.2vw, 26px);
+    color: var(--text-muted);
+    margin-bottom: 52px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s ease forwards;
+    max-width: 480px;
+  }
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s ease forwards;
+  }
+  .btn-primary {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 20px 48px;
+    background: var(--red);
+    color: var(--text);
+    font-weight: 500;
+    text-decoration: none;
+    cursor: none;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  .btn-primary:hover { background: var(--red-light); }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-ghost {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: none;
+    transition: color 0.3s;
+  }
+  .btn-ghost:hover { color: var(--text); }
+  .btn-ghost-arrow { transition: transform 0.3s; font-size: 18px; }
+  .btn-ghost:hover .btn-ghost-arrow { transform: translateX(6px); }
+
+  .hero-stats {
+    position: absolute;
+    right: 52px;
+    bottom: 88px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s ease forwards;
+  }
+  .hero-stat { text-align: right; }
+  .hero-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: var(--red-light);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+  .hero-stat-label {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 10;
+    opacity: 0;
+    animation: fadeIn 1s 1.3s ease forwards;
+  }
+  .scroll-line {
+    width: 1px; height: 56px;
+    background: linear-gradient(to bottom, transparent, var(--red-dim));
+    animation: scrollPulse 2s infinite;
+  }
+  .scroll-text {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* MARQUEE */
+  .marquee-section {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 0;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .marquee-track {
+    display: flex;
+    animation: marquee 30s linear infinite;
+    width: max-content;
+  }
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 28px;
+    white-space: nowrap;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+  }
+  .marquee-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--red);
+    flex-shrink: 0;
+  }
+
+  /* SECTIONS */
+  .section { padding: 120px 48px; }
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red-light);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--red);
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(46px, 6vw, 78px);
+    line-height: 0.93;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+  .section-title em {
+    font-style: normal;
+    color: var(--red-light);
+  }
+
+  /* COSA È IL CALISTHENICS — sezione intro */
+  .intro-section {
+    padding: 120px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .intro-image {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+  }
+  .intro-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.85) contrast(1.05);
+  }
+  .intro-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, rgba(8,8,8,0.7) 100%);
+    z-index: 1;
+  }
+  .intro-image-tag {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    z-index: 2;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red-light);
+    border: 1px solid var(--red-border);
+    padding: 8px 16px;
+    background: rgba(8,8,8,0.6);
+    backdrop-filter: blur(4px);
+  }
+  .intro-text .section-label { margin-bottom: 24px; }
+  .intro-text .section-title { margin-bottom: 36px; }
+  .intro-body {
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
+  .intro-body strong {
+    color: var(--text);
+    font-weight: 400;
+  }
+  .intro-pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 40px;
+    border: 1px solid var(--border);
+  }
+  .intro-pillar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .intro-pillar:last-child { border-bottom: none; }
+  .intro-pillar:hover { background: var(--surface2); }
+  .pillar-icon {
+    width: 36px; height: 36px;
+    border: 1px solid var(--red-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--red-light);
+  }
+  .pillar-label {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+  .pillar-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  /* METODO */
+  .method-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 72px;
+    border: 1px solid var(--border);
+  }
+  .method-card {
+    padding: 52px 44px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+  }
+  .method-card:nth-child(even) { border-right: none; }
+  .method-card:nth-child(3),
+  .method-card:nth-child(4) { border-bottom: none; }
+  .method-card:hover { background: var(--surface2); }
+  .method-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s ease;
+  }
+  .method-card:hover::before { transform: scaleX(1); }
+  .method-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 68px;
+    color: var(--surface3);
+    line-height: 1;
+    margin-bottom: 20px;
+    transition: color 0.4s;
+  }
+  .method-card:hover .method-num { color: rgba(139,26,26,0.2); }
+  .method-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 24px;
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .method-desc {
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* PROGRAMMI */
+  .programs-section {
+    padding: 120px 48px;
+    background: var(--surface);
+  }
+  .programs-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: end;
+    margin-bottom: 72px;
+  }
+  .programs-intro {
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-top: 32px;
+  }
+  .programs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+  .program-card {
+    background: var(--surface);
+    padding: 44px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+    cursor: none;
+  }
+  .program-card.featured { background: var(--surface2); }
+  .program-card:hover { background: var(--surface3); }
+  .program-badge {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text);
+    background: var(--red);
+    padding: 6px 14px;
+    display: inline-block;
+    margin-bottom: 28px;
+  }
+  .program-icon {
+    width: 44px; height: 44px;
+    margin-bottom: 24px;
+    color: var(--red-light);
+  }
+  .program-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .program-tagline {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--red-dim);
+    color: #7A3030;
+    margin-bottom: 20px;
+  }
+  .program-desc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 28px;
+  }
+  .program-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .program-features li {
+    font-size: 13px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .program-features li::before {
+    content: '';
+    display: block;
+    width: 14px; height: 1px;
+    background: var(--red);
+    flex-shrink: 0;
+  }
+  .program-cta {
+    margin-top: 36px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red-light);
+    text-decoration: none;
+    transition: gap 0.3s;
+    cursor: none;
+  }
+  .program-cta:hover { gap: 20px; }
+
+  /* PROOF */
+  .proof-section {
+    padding: 120px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .proof-visual {
+    position: relative;
+    aspect-ratio: 4/5;
+  }
+  .proof-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.8) contrast(1.1);
+  }
+  .proof-accent {
+    position: absolute;
+    bottom: -24px;
+    right: -24px;
+    width: 148px; height: 148px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .proof-accent-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--red-light);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+  .proof-accent-text {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 0 12px;
+  }
+  .testimonials {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .testimonial {
+    background: var(--surface2);
+    padding: 36px;
+    border-left: 2px solid transparent;
+    transition: all 0.3s;
+    cursor: none;
+  }
+  .testimonial:hover {
+    background: var(--surface3);
+    border-left-color: var(--red);
+  }
+  .testimonial-text {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .testimonial-author { display: flex; align-items: center; gap: 14px; }
+  .author-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--surface3);
+    border: 1px solid var(--red-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--red-light);
+    flex-shrink: 0;
+  }
+  .author-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .author-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .stars { display: flex; gap: 3px; margin-left: auto; }
+  .star { color: var(--red-light); font-size: 11px; }
+
+  /* CTA */
+  .cta-section {
+    padding: 160px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(139,26,26,0.1) 0%, transparent 70%);
+  }
+
+  /* CTA BG IMAGE */
+  .cta-bg-img {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .cta-bg-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.08;
+    filter: grayscale(1) contrast(1.3);
+    display: block;
+  }
+
+  .cta-eyebrow {
+    position: relative;
+    z-index: 1;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red-light);
+    margin-bottom: 32px;
+  }
+  .cta-title {
+    position: relative;
+    z-index: 1;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 9vw, 116px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 40px;
+  }
+  .cta-title span { color: var(--red-light); }
+  .cta-sub {
+    position: relative;
+    z-index: 1;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 19px;
+    color: var(--text-muted);
+    max-width: 480px;
+    margin: 0 auto 52px;
+    line-height: 1.65;
+  }
+  .cta-form {
+    display: flex;
+    gap: 0;
+    max-width: 520px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-input {
+    flex: 1;
+    padding: 20px 24px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--red-border);
+    border-right: none;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .cta-input::placeholder { color: var(--text-dim); }
+  .cta-input:focus { border-color: var(--red); }
+  .cta-btn {
+    padding: 20px 32px;
+    background: var(--red);
+    color: var(--text);
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: none;
+    transition: background 0.3s;
+    white-space: nowrap;
+  }
+  .cta-btn:hover { background: var(--red-light); }
+  .cta-note {
+    position: relative;
+    z-index: 1;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 20px;
+    letter-spacing: 0.3px;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 56px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 4px;
+    color: var(--text-muted);
+  }
+  .footer-logo span { color: var(--red-light); }
+  .footer-links { display: flex; gap: 28px; list-style: none; }
+  .footer-links a {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--red-light); }
+  .footer-copy { font-size: 12px; color: var(--text-dim); }
+
+  /* LIGHT MODE overrides hardcoded */
+  html.light body { background: var(--black); }
+  html.light .hero-bg {
+    background:
+      radial-gradient(ellipse 55% 60% at 68% 45%, rgba(139,26,26,0.06) 0%, transparent 65%),
+      radial-gradient(ellipse 30% 40% at 15% 75%, rgba(139,26,26,0.03) 0%, transparent 60%),
+      #F7F3EE;
+  }
+  html.light .hero-lines {
+    background-image: repeating-linear-gradient(
+      90deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 80px
+    );
+  }
+  html.light .hero-img-wrap::after {
+    background:
+      linear-gradient(to right, #F7F3EE 0%, rgba(247,243,238,0.35) 40%, transparent 65%),
+      linear-gradient(to top, rgba(247,243,238,0.85) 0%, transparent 35%);
+  }
+  html.light .method-card:hover .method-num { color: rgba(139,26,26,0.15); }
+  html.light .method-num { color: var(--surface3); }
+  html.light .intro-image::before {
+    background: linear-gradient(to bottom, transparent 60%, rgba(247,243,238,0.7) 100%);
+  }
+  html.light .intro-image-tag { background: rgba(247,243,238,0.75); }
+  html.light .cta-section::before {
+    background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(139,26,26,0.06) 0%, transparent 70%);
+  }
+  html.light nav {
+    background: linear-gradient(to bottom, rgba(247,243,238,0.97), transparent);
+  }
+  html.light nav.scrolled { background: rgba(247,243,238,0.98); }
+  html.light .btn-primary { color: #F7F3EE; }
+  html.light .program-badge { color: #F7F3EE; }
+  html.light .cta-input {
+    background: rgba(0,0,0,0.03);
+    color: var(--text);
+  }
+  html.light .cta-btn { color: #F7F3EE; }
+  html.light .scroll-line {
+    background: linear-gradient(to bottom, transparent, rgba(139,26,26,0.3));
+  }
+  html.light .author-avatar { background: var(--surface2); }
+  html.light .proof-visual img { filter: brightness(0.95) contrast(1.05); }
+  html.light .program-tagline { color: #8B3030; }
+
+  /* THEME TOGGLE BUTTON */
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: 1px solid var(--red-border);
+    cursor: none;
+    padding: 7px 14px;
+    border-radius: 40px;
+    transition: border-color 0.3s;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover { border-color: var(--red-light); }
+  .theme-toggle-track {
+    width: 28px;
+    height: 16px;
+    border-radius: 8px;
+    background: var(--surface3);
+    position: relative;
+    transition: background 0.3s;
+    flex-shrink: 0;
+  }
+  html.light .theme-toggle-track { background: var(--red); }
+  .theme-toggle-thumb {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: transform 0.3s, background 0.3s;
+  }
+  html.light .theme-toggle-thumb {
+    transform: translateX(12px);
+    background: #F7F3EE;
+  }
+  .theme-toggle-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    transition: color 0.3s;
+    white-space: nowrap;
+  }
+  .theme-toggle:hover .theme-toggle-label { color: var(--text-muted); }
+
+  @media (max-width: 900px) { .theme-toggle-label { display: none; } }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 18px 20px; }
+    nav.scrolled { padding: 12px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 0 20px 80px; }
+    .hero-img-wrap { opacity: 0.25; }
+    .hero-stats { display: none; }
+    .section { padding: 72px 20px; }
+    .intro-section { grid-template-columns: 1fr; padding: 72px 20px; gap: 40px; }
+    .intro-image { display: none; }
+    .method-grid { grid-template-columns: 1fr; }
+    .method-card { border-right: none; }
+    .method-card:nth-child(3) { border-bottom: 1px solid var(--border); }
+    .programs-section { padding: 72px 20px; }
+    .programs-header { grid-template-columns: 1fr; }
+    .programs-grid { grid-template-columns: 1fr; }
+    .proof-section { grid-template-columns: 1fr; padding: 72px 20px; gap: 40px; }
+    .proof-visual { display: none; }
+    .cta-section { padding: 100px 20px; }
+    .cta-form { flex-direction: column; }
+    .cta-input { border-right: 1px solid var(--red-border); border-bottom: none; }
+    footer { padding: 36px 20px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">STENIKA<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#calisthenics">Il Calisthenics</a></li>
+    <li><a href="#metodo">Metodo</a></li>
+    <li><a href="#programmi">Programmi</a></li>
+    <li><a href="#risultati">Risultati</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambia tema">
+      <div class="theme-toggle-track"><div class="theme-toggle-thumb"></div></div>
+      <span class="theme-toggle-label" id="themeLabel">Dark</span>
+    </button>
+    <a href="#prova" class="nav-cta">Prima sessione gratis</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+
+  <div class="hero-img-wrap">
+    <img src="img/hero-atleta.png" alt="Atleta Stenika in allenamento">
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Grugliasco — Calisthenics Studio</p>
+    <h1 class="hero-title">
+      Il tuo corpo<br>è il tuo<br><em>peso.</em>
+    </h1>
+    <p class="hero-subtitle">Niente macchine. Niente scuse. Solo la forza che costruisci con le tue mani.</p>
+    <div class="hero-actions">
+      <a href="#prova" class="btn-primary">Prenota la prova gratuita</a>
+      <a href="#calisthenics" class="btn-ghost">Scopri il metodo <span class="btn-ghost-arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">500+</div>
+      <div class="hero-stat-label">Atleti formati</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">4.9</div>
+      <div class="hero-stat-label">Rating Google</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">5</div>
+      <div class="hero-stat-label">Anni a Grugliasco</div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <span class="scroll-text">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item"><span>Pull-up</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Muscle-up</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Handstand</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Planche</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Front Lever</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Dips</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>L-sit</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Mobilità</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Forza</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Controllo</span><div class="marquee-dot"></div></div>
+    <!-- duplicato loop -->
+    <div class="marquee-item"><span>Pull-up</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Muscle-up</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Handstand</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Planche</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Front Lever</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Dips</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>L-sit</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Mobilità</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Forza</span><div class="marquee-dot"></div></div>
+    <div class="marquee-item"><span>Controllo</span><div class="marquee-dot"></div></div>
+  </div>
+</div>
+
+<!-- COSA È IL CALISTHENICS -->
+<section class="intro-section" id="calisthenics">
+  <div class="intro-image reveal">
+    <img src="img/studio-ambiente.png" alt="Lo studio Stenika a Grugliasco">
+    <div class="intro-image-tag">Grugliasco, Torino</div>
+  </div>
+  <div class="intro-text">
+    <div class="section-label reveal">Cos'è il calisthenics</div>
+    <h2 class="section-title reveal">Forza vera.<br>Zero <em>attrezzi.</em></h2>
+    <p class="intro-body reveal">
+      <strong>Calisthenics</strong> è l'arte di usare il proprio peso corporeo come resistenza. Niente bilancieri, niente macchine isotoniche. Solo il tuo corpo, la gravità, e il lavoro progressivo per dominarlo.
+    </p>
+    <p class="intro-body reveal">
+      È l'allenamento più antico del mondo — e il più completo. Sviluppa <strong>forza, coordinazione, mobilità e controllo</strong> in modo simultaneo. I risultati si vedono, si sentono e — soprattutto — durano.
+    </p>
+    <div class="intro-pillars reveal">
+      <div class="intro-pillar">
+        <div class="pillar-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        </div>
+        <div>
+          <div class="pillar-label">Forza funzionale</div>
+          <div class="pillar-sub">Costruita con movimenti reali, non macchine isolate</div>
+        </div>
+      </div>
+      <div class="intro-pillar">
+        <div class="pillar-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div>
+          <div class="pillar-label">Progressione strutturata</div>
+          <div class="pillar-sub">Dal primo pull-up al front lever, passo dopo passo</div>
+        </div>
+      </div>
+      <div class="intro-pillar">
+        <div class="pillar-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="pillar-label">Zero infortuni</div>
+          <div class="pillar-sub">Carico naturale, tecnica sempre al centro</div>
+        </div>
+      </div>
+      <div class="intro-pillar">
+        <div class="pillar-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <div class="pillar-label">Community reale</div>
+          <div class="pillar-sub">Piccoli gruppi, coach sempre presente</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METODO -->
+<section class="section" id="metodo" style="background: var(--surface);">
+  <div class="reveal">
+    <div class="section-label">Come lavoriamo</div>
+    <h2 class="section-title">Il metodo<br><em>Stenika.</em></h2>
+  </div>
+  <div class="method-grid">
+    <div class="method-card reveal">
+      <div class="method-num">01</div>
+      <h3 class="method-title">Assessment iniziale</h3>
+      <p class="method-desc">Prima di allenarti, ti valutiamo. Postura, mobilità articolare, livello di forza base. Niente schede preconfezionate: il tuo percorso parte da dove sei tu, non da uno standard.</p>
+    </div>
+    <div class="method-card reveal">
+      <div class="method-num">02</div>
+      <h3 class="method-title">Progressione personalizzata</h3>
+      <p class="method-desc">Ogni skill ha la sua progressione. Il coach costruisce il tuo piano settimanale intorno ai tuoi obiettivi — che tu voglia fare il tuo primo pull-up o arrivare al muscle-up.</p>
+    </div>
+    <div class="method-card reveal">
+      <div class="method-num">03</div>
+      <h3 class="method-title">Classi in piccoli gruppi</h3>
+      <p class="method-desc">Massimo 10 atleti per sessione, sempre con 2 coach in sala. Ogni ripetizione vista, ogni errore corretto. L'attenzione di un personal trainer, la motivazione di un gruppo.</p>
+    </div>
+    <div class="method-card reveal">
+      <div class="method-num">04</div>
+      <h3 class="method-title">Skill tracking mensile</h3>
+      <p class="method-desc">Ogni mese testiamo i tuoi progressi sulle skill target. I dati non mentono: vedi esattamente quanto hai guadagnato in forza, mobilità e controllo dal primo giorno.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMMI -->
+<section class="programs-section" id="programmi">
+  <div class="programs-header">
+    <div class="reveal">
+      <div class="section-label">I programmi</div>
+      <h2 class="section-title">Scegli il<br>tuo<br><em>percorso.</em></h2>
+    </div>
+    <div class="reveal">
+      <p class="programs-intro">Tre percorsi, un'unica filosofia: progredire con metodo. Dal principiante assoluto all'atleta che vuole sbloccare le skills avanzate.</p>
+    </div>
+  </div>
+
+  <div class="programs-grid reveal">
+    <div class="program-card">
+      <svg class="program-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="24" y1="8" x2="24" y2="40"/><line x1="8" y1="20" x2="40" y2="20"/><circle cx="24" cy="24" r="14"/>
+      </svg>
+      <div class="program-name">Starter</div>
+      <div class="program-tagline">Il primo pull-up inizia qui</div>
+      <p class="program-desc">Per chi parte da zero o vuole imparare le basi del corpo libero. Costruisci la forza di base, impara la tecnica corretta, scopri quanto sei capace.</p>
+      <ul class="program-features">
+        <li>3 classi a settimana</li>
+        <li>Assessment iniziale incluso</li>
+        <li>Focus su push, pull, squat</li>
+        <li>Mobilità e stretching</li>
+      </ul>
+      <a href="#prova" class="program-cta">Inizia ora →</a>
+    </div>
+
+    <div class="program-card featured">
+      <div class="program-badge">Più scelto</div>
+      <svg class="program-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polygon points="24,6 29,18 42,18 32,26 36,39 24,31 12,39 16,26 6,18 19,18"/>
+      </svg>
+      <div class="program-name">Skills</div>
+      <div class="program-tagline">Muscle-up, handstand, front lever</div>
+      <p class="program-desc">Il programma di punta Stenika. Per chi ha già una base e vuole sbloccare le skills avanzate del calisthenics, con progressioni strutturate skill by skill.</p>
+      <ul class="program-features">
+        <li>4 classi a settimana</li>
+        <li>Coach dedicato alle skills</li>
+        <li>Progressioni individualizzate</li>
+        <li>Skill test mensile</li>
+        <li>Accesso open gym</li>
+      </ul>
+      <a href="#prova" class="program-cta">Inizia ora →</a>
+    </div>
+
+    <div class="program-card">
+      <svg class="program-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M24 4 L24 44 M12 16 L24 4 L36 16 M10 32 L24 44 L38 32"/>
+      </svg>
+      <div class="program-name">Performance</div>
+      <div class="program-tagline">Nessun limite, nessun compromesso</div>
+      <p class="program-desc">Accesso illimitato allo studio, coaching one-to-one, programmazione annuale. Per atleti seri che vogliono portare il calisthenics al livello successivo.</p>
+      <ul class="program-features">
+        <li>Accesso illimitato</li>
+        <li>Coaching one-to-one</li>
+        <li>Programmazione annuale</li>
+        <li>Analisi video tecnica</li>
+        <li>Supporto nutrizione</li>
+      </ul>
+      <a href="#prova" class="program-cta">Richiedi info →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="proof-section" id="risultati">
+  <div class="proof-visual reveal">
+    <img src="img/proof-transformation.png" alt="Risultati allenamento calisthenics Stenika">
+    <div class="proof-accent">
+      <div class="proof-accent-num">94%</div>
+      <div class="proof-accent-text">rinnova dopo<br>il primo mese</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-label reveal">Cosa dicono i nostri atleti</div>
+    <h2 class="section-title reveal">Parla chi<br>l'ha <em>vissuto.</em></h2>
+
+    <div class="testimonials" style="margin-top: 44px;">
+      <div class="testimonial reveal">
+        <p class="testimonial-text">"Avevo provato tre palestre diverse. Nessuna mi aveva insegnato davvero a muovermi. A Stenika ho fatto il mio primo muscle-up dopo otto settimane."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">LM</div>
+          <div>
+            <div class="author-name">Luca Merlo</div>
+            <div class="author-meta">Programma Skills — 5 mesi</div>
+          </div>
+          <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        </div>
+      </div>
+
+      <div class="testimonial reveal">
+        <p class="testimonial-text">"Credevo che il calisthenics fosse roba da acrobati. I coach di Stenika mi hanno dimostrato che chiunque può iniziare, a qualsiasi età."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">CR</div>
+          <div>
+            <div class="author-name">Chiara Romano</div>
+            <div class="author-meta">Programma Starter — 3 mesi</div>
+          </div>
+          <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        </div>
+      </div>
+
+      <div class="testimonial reveal">
+        <p class="testimonial-text">"La qualità dell'insegnamento non ha paragoni a Grugliasco. Ogni sessione ha uno scopo preciso. Si percepisce che i coach sanno esattamente dove vogliono portarti."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AF</div>
+          <div>
+            <div class="author-name">Andrea Ferretti</div>
+            <div class="author-meta">Programma Performance — 7 mesi</div>
+          </div>
+          <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="prova">
+  <div class="cta-bg-img">
+    <img src="img/cta-bg.png" alt="">
+  </div>
+  <p class="cta-eyebrow">La prima sessione è gratuita</p>
+  <h2 class="cta-title">Inizia<br><span>adesso.</span></h2>
+  <p class="cta-sub">Lasciaci il tuo numero. Ti ricontattiamo entro 24 ore per fissare la tua prima sessione di prova — senza impegni.</p>
+  <form class="cta-form" onsubmit="handleSubmit(event)">
+    <input type="tel" class="cta-input" placeholder="+39 000 000 0000" required>
+    <button type="submit" class="cta-btn">Prenota gratis</button>
+  </form>
+  <p class="cta-note">Nessun pagamento anticipato. Nessuna pressione. Solo un'ora con i coach Stenika a Grugliasco.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">STENIKA<span>.</span></div>
+  <ul class="footer-links">
+    <li><a href="#">Privacy Policy</a></li>
+    <li><a href="#">Cookie</a></li>
+    <li><a href="#">Contatti</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 Stenika — Grugliasco (TO)</p>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  (function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  })();
+
+  document.querySelectorAll('a, button, .program-card, .testimonial, .method-card, .intro-pillar').forEach(el => {
+    el.addEventListener('mouseenter', () => { ring.style.width = '52px'; ring.style.height = '52px'; ring.style.opacity = '0.5'; });
+    el.addEventListener('mouseleave', () => { ring.style.width = '32px'; ring.style.height = '32px'; ring.style.opacity = '1'; });
+  });
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const parent = entry.target.closest('.method-grid, .programs-grid, .testimonials, .intro-pillars');
+        const delay = parent ? Array.from(parent.children).indexOf(entry.target) * 100 : 0;
+        setTimeout(() => entry.target.classList.add('visible'), delay);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    const orig = btn.textContent;
+    btn.textContent = 'Prenotato ✓';
+    btn.style.background = '#2D6A2D';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; e.target.reset(); }, 3000);
+  }
+
+  // THEME TOGGLE
+  const toggleBtn = document.getElementById('themeToggle');
+  const themeLabel = document.getElementById('themeLabel');
+  let isLight = false;
+
+  // Ripristina preferenza salvata
+  if (localStorage.getItem('stenika-theme') === 'light') {
+    isLight = true;
+    document.documentElement.classList.add('light');
+    themeLabel.textContent = 'Light';
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    isLight = !isLight;
+    document.documentElement.classList.toggle('light', isLight);
+    themeLabel.textContent = isLight ? 'Light' : 'Dark';
+    localStorage.setItem('stenika-theme', isLight ? 'light' : 'dark');
+  });
+</script>
+</body>
+</html>
